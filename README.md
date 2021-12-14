@@ -4,7 +4,9 @@
 - Por questão de direitos autorais, os sprites não serão fornecidos.
 
 # Implementação
-- Movimentos: andar para direita (ou esquerda)(atirando ou não), pular (atirando), cair (atirando ou não)
+- Andar para direita (ou esquerda)(atirando ou não)
+- Pular (atirando)
+- Cair (atirando ou não)
 - Gravidade
 - Em desenvolvimento: sistema de colisão
 
