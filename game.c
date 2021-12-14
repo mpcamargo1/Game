@@ -6,6 +6,7 @@
 
 #include "arena.h"		/*Inclui Character.h | stdbool.h | Allegro5 */
 #include "hud.h"
+
 /*Macros*/
 	/*Tela*/
 #define SCREEN_WIDTH    506
