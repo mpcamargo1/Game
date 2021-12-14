@@ -4,12 +4,11 @@
 - Por questão de direitos autorais, os sprites não serão fornecidos.
 
 # Implementação
-- Movimentos: andar para direita (ou esquerda), pular (atirando), cair
+- Movimentos: andar para direita (ou esquerda)(atirando ou não), pular (atirando), cair (atirando ou não)
 - Gravidade
-- Em desenvolvimento: Sistema de colisão
+- Em desenvolvimento: sistema de colisão
 
 # Demonstração
-https://user-images.githubusercontent.com/88407564/145689637-97888aa0-749c-4fc2-973a-be3ab1403622.mp4
-
+https://user-images.githubusercontent.com/88407564/146075648-5004fdfe-991a-4735-b5e7-bb8c3821c4d2.mp4
 
 

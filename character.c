@@ -236,6 +236,12 @@ void load_character(Character *character){
 	character->fires.ShotAnimation[2][1] = 364;
 	character->fires.ShotAnimation[3][1] = 386;
 
+
+	for(int i=0;i<MAX_FIRE;i++){
+		character->fires.active[i] = false;
+		character->fires.direction[i]=0;
+	}
+
 }
 
 void RunningRight(Character *character){
@@ -381,8 +387,12 @@ void Firing(Character *character){
 		while(i++<MAX_FIRE){
 			if(bc->active[i] == false){
 				bc->active[i] = true;
-				bc->position_X[i] = character->Position[X] + 5;
+				if(character->Direction == 0)
+					bc->position_X[i] = character->Position[X] + VELOCIDADE_BULLET;
+				else
+					bc->position_X[i] = character->Position[X] - VELOCIDADE_BULLET;
 				bc->position_Y[i] = character->Position[Y];
+				bc->direction[i] = character->Direction;
 				break;
 			}
 		}
@@ -430,7 +440,10 @@ void moveBullet(Character *character){
 	
 	for(int i=0;i<MAX_FIRE;i++){
 		if(bc->active[i] == true)
-			bc->position_X[i]+=VELOCIDADE_BULLET;
+			if(bc->direction[i] == 0)
+				bc->position_X[i]+=VELOCIDADE_BULLET;
+			else
+				bc->position_X[i]-=VELOCIDADE_BULLET;
 	}
 
 
@@ -440,7 +453,7 @@ void moveBullet(Character *character){
 bool verifyBullet(Character *character){
 	bulletChar *bc = &character->fires;
 	for(int i=0;i<MAX_FIRE;i++){
-		if(bc->position_X[i] > 900)
+		if(bc->position_X[i] > 900 || bc->position_X[i] < -100)
 			bc->active[i] = false;
 	
 	}

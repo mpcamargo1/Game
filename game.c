@@ -66,7 +66,7 @@ void draw_shot(Character *character){
 	int IndexAnimation = floor(bc->FrameShotAnimation/60);
 	for(int i=0;i<MAX_FIRE;i++){
 		if(bc->active[i] == true){
-			al_draw_bitmap_region(character->sprite,bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[2][IndexAnimation], bc->ShotAnimation[1][IndexAnimation] - bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[3][IndexAnimation] - bc->ShotAnimation[2][IndexAnimation], bc->position_X[i], bc->position_Y[i], 0);
+			al_draw_bitmap_region(character->sprite,bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[2][IndexAnimation], bc->ShotAnimation[1][IndexAnimation] - bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[3][IndexAnimation] - bc->ShotAnimation[2][IndexAnimation], bc->position_X[i], bc->position_Y[i], bc->direction[i]);
 		}
 
 	
@@ -216,7 +216,7 @@ int main()
 	    al_scale_transform(&trans, 1.2, 1.2);
 	    al_use_transform(&trans);
 	    draw_character(&megaman);
-	    //draw_box_collision(&megaman);
+	    draw_box_collision(&megaman);
 	    draw_shot(&megaman);
 
 	    al_flip_display();

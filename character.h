@@ -29,6 +29,9 @@ typedef struct bulletChar{
 	/*Posição X e Y do tiro*/
 	int  position_X[MAX_FIRE];
 	int  position_Y[MAX_FIRE];
+
+	int direction[MAX_FIRE];
+
 	/*Booleano que armazena se o tiro está visível na tela*/
 	bool active[MAX_FIRE];
 	
