@@ -61,7 +61,7 @@ void gravity(Character *character,Arena *arena){
 		initializePosition(character);			/*Coloca o personagem na posição atual*/
 	}
 	/*Caso o personagem não estiver caindo, verificar se a está em pisando em solo firme*/
-	else if (character->state == IDLE || character->state == RUNNING){
+	else if (character->state == IDLE || character->state == RUNNING || character->state == RUNNING_FIRE){
 			/*verify_position_X retorna verdadeiro se o personagem está no intervalo X do chão*/
 			/*Nessa caso, para verificar se está caindo, a função retorna FALSE. Portanto, se estiver caindo, !verify_position_X é verdadeiro*/
 			/* '!' é o operador de negação -- Propriedade da lógica: !(FALSE) = TRUE*/

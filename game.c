@@ -34,7 +34,11 @@ void draw_character(Character *character){
                              IndexAnimation = floor(character->FrameRunningAnimation);
                              al_draw_bitmap_region(character->sprite,character->RunningAnimation[0][IndexAnimation], character->RunningAnimation[2][IndexAnimation], character->RunningAnimation[1][IndexAnimation] - character->RunningAnimation[0][IndexAnimation], character->RunningAnimation[3][IndexAnimation] - character->RunningAnimation[2][IndexAnimation], character->Position[X], character->Position[Y], character->Direction);
                         break;
+		case RUNNING_FIRE:
+			    IndexAnimation = floor(character->FrameRunningShotAnimation);
+			    al_draw_bitmap_region(character->sprite,character->RunningShotAnimation[0][IndexAnimation], character->RunningShotAnimation[2][IndexAnimation], character->RunningShotAnimation[1][IndexAnimation] - character->RunningShotAnimation[0][IndexAnimation], character->RunningShotAnimation[3][IndexAnimation] - character->RunningShotAnimation[2][IndexAnimation], character->Position[X], character->Position[Y], character->Direction);
 
+			break;
                 case IDLE:
                           IndexAnimation = floor(character->FrameIdlingAnimation);
                           al_draw_bitmap_region(character->sprite,character->IdlingAnimation[0][IndexAnimation], character->IdlingAnimation[2][IndexAnimation], character->IdlingAnimation[1][IndexAnimation] - character->IdlingAnimation[0][IndexAnimation],character->IdlingAnimation[3][IndexAnimation] - character->IdlingAnimation[2][IndexAnimation],character->Position[X], character->Position[Y], character->Direction);
@@ -53,6 +57,20 @@ void draw_character(Character *character){
 
             }
 
+
+}
+
+/*Desenha os tiros na tela*/
+void draw_shot(Character *character){
+	bulletChar *bc = &character->fires;
+	int IndexAnimation = floor(bc->FrameShotAnimation/60);
+	for(int i=0;i<MAX_FIRE;i++){
+		if(bc->active[i] == true){
+			al_draw_bitmap_region(character->sprite,bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[2][IndexAnimation], bc->ShotAnimation[1][IndexAnimation] - bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[3][IndexAnimation] - bc->ShotAnimation[2][IndexAnimation], bc->position_X[i], bc->position_Y[i], 0);
+		}
+
+	
+	}
 
 }
 
@@ -125,6 +143,11 @@ int main()
 		megaman.KeyPressed=false;
 		depromove(&megaman);
 
+		/*Verifica se os tiros estão na tela*/
+		verifyBullet(&megaman);
+		/*Aplica movimento ao tiro*/
+		moveBullet(&megaman);
+
 		if(key[ALLEGRO_KEY_UP]){
 		    //megaman.Position[Y]+=-2;
         	    Jumping(&megaman,true);
@@ -156,7 +179,6 @@ int main()
 
 		/*Aplica gravidade ao personagem*/
 		gravity(&megaman,&battle_arena);
-
 
         	for(int i = 0; i < ALLEGRO_KEY_MAX; i++)
         	    key[i] &= KEY_SEEN;
@@ -194,7 +216,8 @@ int main()
 	    al_scale_transform(&trans, 1.2, 1.2);
 	    al_use_transform(&trans);
 	    draw_character(&megaman);
-	    draw_box_collision(&megaman);
+	    //draw_box_collision(&megaman);
+	    draw_shot(&megaman);
 
 	    al_flip_display();
 	    al_use_transform(&prevTrans);

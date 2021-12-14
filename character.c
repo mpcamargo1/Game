@@ -18,6 +18,8 @@ void load_character(Character *character){
 	character->MirroredOffset=0;
 	character->state=IDLE;			/*Atualiza o estado do personagem*/
 	character->currentLevel=0;
+	character->fires.delayShot=0;
+	character->fires.FrameShotAnimation=0;
 
 	/*Running Animation*/
 	character->RunningAnimation[0][0] = 314;
@@ -169,6 +171,70 @@ void load_character(Character *character){
 	character->JumpingShotAnimation[2][6] = 122;
 	character->JumpingShotAnimation[3][6] = 154;
 	*/
+	
+	
+	/*RunningShotAnimation*/
+	character->RunningShotAnimation[0][0] = 285;
+	character->RunningShotAnimation[1][0] = 314;
+	character->RunningShotAnimation[2][0] = 67;
+	character->RunningShotAnimation[3][0] = 101;
+	
+	character->RunningShotAnimation[0][1] = 314;
+	character->RunningShotAnimation[1][1] = 346;
+	character->RunningShotAnimation[2][1] = 66;
+	character->RunningShotAnimation[3][1] = 101;
+	
+	character->RunningShotAnimation[0][2] = 346;
+	character->RunningShotAnimation[1][2] = 381;
+	character->RunningShotAnimation[2][2] = 67;
+	character->RunningShotAnimation[3][2] = 101;
+	
+	character->RunningShotAnimation[0][3] = 382;
+	character->RunningShotAnimation[1][3] = 420;
+	character->RunningShotAnimation[2][3] = 68;
+	character->RunningShotAnimation[3][3] = 101;
+	
+	character->RunningShotAnimation[0][4] = 421;
+	character->RunningShotAnimation[1][4] = 455;
+	character->RunningShotAnimation[2][4] = 68;
+	character->RunningShotAnimation[3][4] = 101;
+	
+	character->RunningShotAnimation[0][5] = 455;
+	character->RunningShotAnimation[1][5] = 486;
+	character->RunningShotAnimation[2][5] = 67;
+	character->RunningShotAnimation[3][5] = 101;
+	
+	character->RunningShotAnimation[0][6] = 486;
+	character->RunningShotAnimation[1][6] = 519;
+	character->RunningShotAnimation[2][6] = 66;
+	character->RunningShotAnimation[3][6] = 101;
+	
+	character->RunningShotAnimation[0][7] = 519;
+	character->RunningShotAnimation[1][7] = 554;
+	character->RunningShotAnimation[2][7] = 68;
+	character->RunningShotAnimation[3][7] = 101;
+	
+	character->RunningShotAnimation[0][8] = 555;
+	character->RunningShotAnimation[1][8] = 592;
+	character->RunningShotAnimation[2][8] = 69;
+	character->RunningShotAnimation[3][8] = 101;
+	
+	character->RunningShotAnimation[0][9] = 592;
+	character->RunningShotAnimation[1][9] = 627;
+	character->RunningShotAnimation[2][9] = 68;
+	character->RunningShotAnimation[3][9] = 101;
+
+	/*ShotAnimation*/
+
+	character->fires.ShotAnimation[0][0] = 211;
+	character->fires.ShotAnimation[1][0] = 251;
+	character->fires.ShotAnimation[2][0] = 364;
+	character->fires.ShotAnimation[3][0] = 383;
+
+	character->fires.ShotAnimation[0][1] = 260;
+	character->fires.ShotAnimation[1][1] = 296;
+	character->fires.ShotAnimation[2][1] = 364;
+	character->fires.ShotAnimation[3][1] = 386;
 
 }
 
@@ -180,6 +246,7 @@ void RunningRight(Character *character){
 
 	switch(character->state){
 		case RUNNING:
+		case RUNNING_FIRE:
 				character->FrameRunningAnimation+=0.25;		/*FrameJumpingAnimation é incrementado*/
 				character->Position[X]+=2;			/*Posição no eixo X é incrementado em duas unidades*/
 				break;
@@ -212,6 +279,7 @@ void RunningLeft(Character *character){
 	/*Verifica o estado do personagem*/
 	switch(character->state){
 		case RUNNING:
+		case RUNNING_FIRE:
 				character->FrameRunningAnimation+=0.25;		/*FrameRunningAnimation é incrementado*/
 				character->Position[X]-=2;			/*Posição do personagem é decrementado*/
 				break;
@@ -240,7 +308,7 @@ void Idling(Character *character){
 
 
 	/*Se o estado do personagem anteriormente for RUNNING -- Força a animação do idling começar do início*/
-	if(character->state==RUNNING)
+	if(character->state==RUNNING || character->state==RUNNING_FIRE)
 		character->FrameIdlingAnimation=0;
 
 	character->state=IDLE; 				/*Manutenção ou atualização do estado de IDLE do personagem*/
@@ -257,7 +325,7 @@ void Jumping(Character *character,bool upPressed){
 
 	/*upPressed = TRUE - Significa que o usuário apertou UP*/
 	/*Caso o estado do personagem for CORRENDO OU IDLE e botão de pulo foi apertado*/
-	if(upPressed == true && (character->state==RUNNING || character->state==IDLE)){
+	if(upPressed == true && (character->state==RUNNING || character->state==IDLE || character->state==RUNNING_FIRE)){
 		character->FrameJumpingAnimation+=1;		/*Incrementa o valor de FrameJumpingAnimation -- IMPORTANTE: FrameJumpingAnimation possui valor INTEIRO*/
 		character->Position[Y]-=4;			/*Posição é decrementada (Decrementar em Y possui ação de subir)*/
 		character->state=JUMPING;			/*Atualiza o estado do personagem*/
@@ -287,27 +355,51 @@ void Jumping(Character *character,bool upPressed){
 }
 
 void Firing(Character *character){
+	int i=0;
 	/*Verifica o estado do personagem*/
 	switch(character->state){
+		case RUNNING:
+			character->state=RUNNING_FIRE;
+			if (character->FrameRunningAnimation < 2)
+				character->FrameRunningShotAnimation = 0;
+			else
+				character->FrameRunningShotAnimation = character->FrameRunningAnimation - 1;
+			break;
 		case JUMPING:
 			character->state=JUMPING_FIRE;
 			break;
 		case FALLING:
 			character->state=FALLING_FIRE;
 			break;
-		
-	
+
 	}
+
+
+	bulletChar *bc = &character->fires;
+	if(bc->delayShot > 90){
+		bc->delayShot=0;
+		while(i++<MAX_FIRE){
+			if(bc->active[i] == false){
+				bc->active[i] = true;
+				bc->position_X[i] = character->Position[X] + 5;
+				bc->position_Y[i] = character->Position[Y];
+				break;
+			}
+		}
+	}
+
+
 }
 
 void depromove(Character *character){
 
 	/*Isso aplica o efeito do personagem apenas mirar quando o usuário aperta X (botão de tiro)*/
+	if(character->state == RUNNING_FIRE)
+		character->state = RUNNING;
 	if(character->state == JUMPING_FIRE)
         	character->state = JUMPING;
         if(character->state == FALLING_FIRE )
                 character->state = FALLING;
-
 
 }
 
@@ -328,12 +420,29 @@ bool verifyIdle(Character *character){
 
 }
 
+void moveBullet(Character *character){
+	bulletChar *bc = &character->fires;
+	bc->FrameShotAnimation++;
+        bc->delayShot++;
+        if (++bc->FrameShotAnimation == 120)
+		bc->FrameShotAnimation = 0;
+
+	
+	for(int i=0;i<MAX_FIRE;i++){
+		if(bc->active[i] == true)
+			bc->position_X[i]+=VELOCIDADE_BULLET;
+	}
+
+
+}
+
 /*Verifica se os tiros estão na tela*/
 bool verifyBullet(Character *character){
 	bulletChar *bc = &character->fires;
-	int i=0;
-	while(i++<MAX_FIRE){
-		
+	for(int i=0;i<MAX_FIRE;i++){
+		if(bc->position_X[i] > 900)
+			bc->active[i] = false;
+	
 	}
 
 }

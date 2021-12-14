@@ -8,19 +8,29 @@
 #define MAX_ANIM    20
 #define MAX_STATES  20
 #define MAX_FIRE    5
-
+#define VELOCIDADE_BULLET	4
 
 /*Bibliotecas*/
 #include <stdbool.h>  		/*Biblioteca para utilizar valores booleanos*/
 #include <allegro5/allegro5.h>  /*Bilbioteca utilizada para carregar o BITMAP do personagem*/
 
-enum CHARACTER_STATE {IDLE,RUNNING,JUMPING,FALLING,JUMPING_FIRE,FALLING_FIRE};
+enum CHARACTER_STATE {IDLE,RUNNING,JUMPING,FALLING,JUMPING_FIRE,FALLING_FIRE,RUNNING_FIRE};
 
 /*Estrutura de dados dos tiros*/
 typedef struct bulletChar{
-	int position_X[MAX_FIRE];
-	int position_Y[MAX_FIRE];
-	ALLEGRO_BITMAP *sprite;
+	/*Controlador de Animação*/
+	int FrameShotAnimation;
+
+	/*Matrizes de Animação*/
+	int ShotAnimation[MAX_POINTS][MAX_ANIM];
+
+	/*Timeout dos tiros*/
+	int delayShot;
+	/*Posição X e Y do tiro*/
+	int  position_X[MAX_FIRE];
+	int  position_Y[MAX_FIRE];
+	/*Booleano que armazena se o tiro está visível na tela*/
+	bool active[MAX_FIRE];
 	
 }bulletChar;
 
@@ -33,6 +43,7 @@ typedef struct character{
 
 	/*Controladores de Animação*/
 	float FrameRunningAnimation;
+	float FrameRunningShotAnimation;
 	float FrameIdlingAnimation;
 	int FrameJumpingAnimation;
 	int FrameJumpingShotAnimation;
@@ -44,6 +55,7 @@ typedef struct character{
 
 	/*Matrizes de Animação -- Contém posição(x,y) de cada bitmap da animação*/
 	int RunningAnimation[MAX_POINTS][MAX_ANIM];
+	int RunningShotAnimation[MAX_POINTS][MAX_ANIM];
 	int IdlingAnimation[MAX_POINTS][MAX_ANIM];
 	int JumpingAnimation[MAX_POINTS][MAX_ANIM];
 	int JumpingShotAnimation[MAX_POINTS][MAX_ANIM];
@@ -84,6 +96,7 @@ void depromove(Character *character);
 bool verifyIdle(Character *character);
 /*Verifica se os tiros estão na tela*/
 bool verifyBullet(Character *character);
-
+/*Aplica movimento ao tiro*/
+void moveBullet(Character *character);
 
 #endif // LIB_H_
