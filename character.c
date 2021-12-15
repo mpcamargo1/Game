@@ -382,15 +382,16 @@ void Firing(Character *character){
 
 
 	bulletChar *bc = &character->fires;
+	int offsetBullet = 23;
 	if(bc->delayShot > 90){
 		bc->delayShot=0;
 		while(i++<MAX_FIRE){
 			if(bc->active[i] == false){
 				bc->active[i] = true;
 				if(character->Direction == 0)
-					bc->position_X[i] = character->Position[X] + VELOCIDADE_BULLET;
+					bc->position_X[i] = character->Position[X] + offsetBullet;
 				else
-					bc->position_X[i] = character->Position[X] - VELOCIDADE_BULLET;
+					bc->position_X[i] = character->Position[X] - offsetBullet;
 				bc->position_Y[i] = character->Position[Y];
 				bc->direction[i] = character->Direction;
 				break;

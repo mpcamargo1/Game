@@ -16,7 +16,7 @@
 #define KEY_SEEN     1
 #define KEY_RELEASED 2
 
-// Compilar com o GCC : gcc game.c arena.c hud.c -lm -o game $(pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 --libs --cflags)
+// Compilar com o GCC : gcc game.c arena.c hud.c character.c -lm -o game $(pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 --libs --cflags)
 // Obs : A estrutura principal do código é baseado em https://github.com/liballeg/allegro_wiki/wiki/Allegro-Vivace%3A-Input
 
 
