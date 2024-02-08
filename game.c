@@ -66,10 +66,12 @@ void draw_shot(Character *character){
 	int IndexAnimation = floor(bc->FrameShotAnimation/60);
 	for(int i=0;i<MAX_FIRE;i++){
 		if(bc->active[i] == true){
-			al_draw_bitmap_region(character->sprite,bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[2][IndexAnimation], bc->ShotAnimation[1][IndexAnimation] - bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[3][IndexAnimation] - bc->ShotAnimation[2][IndexAnimation], bc->position_X[i], bc->position_Y[i], bc->direction[i]);
+			al_draw_bitmap_region(character->sprite, 
+					bc->ShotAnimation[0][IndexAnimation], bc->ShotAnimation[2][IndexAnimation],
+					bc->ShotAnimation[1][IndexAnimation] - bc->ShotAnimation[0][IndexAnimation],
+					bc->ShotAnimation[3][IndexAnimation] - bc->ShotAnimation[2][IndexAnimation],
+					bc->position_X[i], bc->position_Y[i], bc->direction[i]);
 		}
-
-	
 	}
 
 }
@@ -86,11 +88,15 @@ void must_init(bool test, const char *description)
 int main()
 {
     Character megaman;
-    Arena battle_arena;
     initializePosition(&megaman);
     load_character(&megaman);
+
+    Arena battle_arena;
     load_arena(&battle_arena);
 
+    HUD hud;
+    load_hud(&hud);
+    
     fprintf(stderr,"%d e %d\n",megaman.Position[X],megaman.Position[Y]);
 
     must_init(al_init(), "allegro");
@@ -115,6 +121,7 @@ int main()
     must_init(al_init_image_addon(), "image addon");
     megaman.sprite = al_load_bitmap("megamanx.png");
     battle_arena.sprite = al_load_bitmap("arena.png");
+    hud.sprite = al_load_bitmap("hud.png");
 
     must_init(al_init_primitives_addon(), "primitives");
 
@@ -215,12 +222,20 @@ int main()
 	    
 	    al_scale_transform(&trans, 1.2, 1.2);
 	    al_use_transform(&trans);
+	    
 	    draw_character(&megaman);
 	    draw_box_collision(&megaman);
 	    draw_shot(&megaman);
 
-	    al_flip_display();
 	    al_use_transform(&prevTrans);
+
+	    al_scale_transform(&trans, 1.5, 1.5);
+	    al_use_transform(&trans);
+	    
+	    draw_hud(&hud,&megaman);
+	    
+	    al_flip_display();
+            al_use_transform(&prevTrans);
             redraw = false;
         }
     }
@@ -229,10 +244,9 @@ int main()
     al_destroy_display(disp);
     al_destroy_timer(timer);
     al_destroy_bitmap(megaman.sprite);
+    al_destroy_bitmap(battle_arena.sprite);
+    al_destroy_bitmap(hud.sprite);
     al_destroy_event_queue(queue);
 
     return 0;
 }
-
-
-

@@ -13,6 +13,7 @@ void load_character(Character *character){
 	character->Direction=0;			/*Personagem olhando para a direita*/
 	character->FrameRunningAnimation=0;
 	character->FrameIdlingAnimation=0;
+	character->FrameIdlingShotAnimation=0;
 	character->FrameJumpingAnimation=0;
 	character->FrameJumpingShotAnimation=0;
 	character->MirroredOffset=0;
@@ -20,6 +21,7 @@ void load_character(Character *character){
 	character->currentLevel=0;
 	character->fires.delayShot=0;
 	character->fires.FrameShotAnimation=0;
+	character->damage=0;
 
 	/*Running Animation*/
 	character->RunningAnimation[0][0] = 314;
@@ -93,6 +95,18 @@ void load_character(Character *character){
 	character->IdlingAnimation[1][2] = 306;
 	character->IdlingAnimation[2][2] = 14;
 	character->IdlingAnimation[3][2] = 48;
+
+	/*IdlingShotAnimation*/
+
+	character->IdlingShotAnimation[0][0] = 1;
+	character->IdlingShotAnimation[1][0] = 31;
+	character->IdlingShotAnimation[2][0] = 163;
+	character->IdlingShotAnimation[3][0] = 197;
+
+	character->IdlingShotAnimation[0][1] = 36;
+	character->IdlingShotAnimation[1][2] = 65;
+	character->IdlingShotAnimation[2][3] = 163;
+	character->IdlingShotAnimation[3][4] = 197;
 
 	/*JumpingAnimation*/
 
@@ -253,7 +267,7 @@ void RunningRight(Character *character){
 	switch(character->state){
 		case RUNNING:
 		case RUNNING_FIRE:
-				character->FrameRunningAnimation+=0.25;		/*FrameJumpingAnimation é incrementado*/
+				character->FrameRunningAnimation+=0.25;		/*FrameRunningAnimation é incrementado*/
 				character->Position[X]+=2;			/*Posição no eixo X é incrementado em duas unidades*/
 				break;
 		case IDLE:

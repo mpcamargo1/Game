@@ -1,5 +1,5 @@
-#ifndef LIB_H_   /* Include guard */
-#define LIB_H_
+#ifndef _ARENA_H_   /* Include guard */
+#define _ARENA_H_
 
 #define MAX_LEVELS  3		/*Essa fase possui 3 plataformas de solo firme*/
 #define MAX_BORDERS 2		/*Borda da esquerda e direita*/
@@ -29,4 +29,4 @@ bool verify_position_X(int PositionCharacter, int limiteEsquerdaArena, int limit
 bool verify_position_Y(int PositionCharacter, int limiteInferiorArena);
 
 
-#endif // LIB_H_
+#endif

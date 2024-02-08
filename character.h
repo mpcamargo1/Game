@@ -1,5 +1,5 @@
-#ifndef LIB_H
-#define LIB_H
+#ifndef _CHARACTER_H
+#define _CHARACTER_H
 
 /*Macros*/
 #define X           0
@@ -48,6 +48,7 @@ typedef struct character{
 	float FrameRunningAnimation;
 	float FrameRunningShotAnimation;
 	float FrameIdlingAnimation;
+	float FrameIdlingShotAnimation;
 	int FrameJumpingAnimation;
 	int FrameJumpingShotAnimation;
 
@@ -60,6 +61,7 @@ typedef struct character{
 	int RunningAnimation[MAX_POINTS][MAX_ANIM];
 	int RunningShotAnimation[MAX_POINTS][MAX_ANIM];
 	int IdlingAnimation[MAX_POINTS][MAX_ANIM];
+	int IdlingShotAnimation[MAX_POINTS][MAX_ANIM];
 	int JumpingAnimation[MAX_POINTS][MAX_ANIM];
 	int JumpingShotAnimation[MAX_POINTS][MAX_ANIM];
 
@@ -73,6 +75,9 @@ typedef struct character{
 	ALLEGRO_BITMAP *sprite;
 	
 	bulletChar fires;
+
+	/*Armazena o valor de dano recebido*/
+	double damage;
 	
 }Character;
 
@@ -102,4 +107,4 @@ bool verifyBullet(Character *character);
 /*Aplica movimento ao tiro*/
 void moveBullet(Character *character);
 
-#endif // LIB_H_
+#endif
